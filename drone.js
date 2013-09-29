@@ -21,16 +21,14 @@ configs.forEach(function(config, i) {
   png(newClient, {"port": 80 + config.ip.substring(11, 13)});
 });
 
-console.log(clients.length);
-
 var port = 3000;
-app.listen(port);
-/*
+server.listen(port);
+
 app.use('/js', express.static(__dirname + '/js'));
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
-*/
+
 
 function stopAfter(ms) {
   clients.forEach(function(client) {
