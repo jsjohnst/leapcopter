@@ -20,18 +20,18 @@ function debounce(func, wait, immediate) {
 };
 
 function sendCommandImmediate(cmd) {
-    socket.emit(cmd); 
+    socket.emit(cmd);
 }
 
-var sendCommand = debounce(function(cmd) { 
+var sendCommand = debounce(function(cmd) {
     sendCommandImmediate(cmd);
-    return true; 
+    return true;
 }, 250, true);
 
 function gestureRecognized(gesture, sub) {
     if(!inflight) {
         if(gesture == "multi" && sub == "up") {
-            sendCommandImmediate("blink")
+            sendCommandImmediate("takeoff");
             inflight = true;
         }
         return;
@@ -44,7 +44,7 @@ function gestureRecognized(gesture, sub) {
             sendCommandImmediate("land");
             inflight = false;
         }
-    } 
+    }
 }
 
 function handleMovement(gesture) {
@@ -59,7 +59,7 @@ function detectMovement(gesture) {
         if(Math.abs(d[index]) > Math.abs(velocity)) {
             velocity = d[index];
             plane = index;
-        } 
+        }
     }
     switch(plane) {
         case "0":
@@ -107,14 +107,14 @@ var controllerOptions = {enableGestures: true};
 Leap.loop(controllerOptions, function(event) {
    if (event.hands.length == 2 && event.gestures.length == 2) {
         var hand1 = detectMovement(event.gestures[0]);
-        var hand2 = detectMovement(event.gestures[1]); 
+        var hand2 = detectMovement(event.gestures[1]);
 
         if(hand1 == "up" && hand2 == "up") {
             return gestureRecognized("multi", "up");
         } else if(hand1 == "down" && hand2 == "down") {
             return gestureRecognized("multi", "down");
         }
-   }  
+   }
 
    if(event.gestures.length > 0) {
         var g = event.gestures[0];
@@ -125,4 +125,3 @@ Leap.loop(controllerOptions, function(event) {
         }
    }
 });
-
