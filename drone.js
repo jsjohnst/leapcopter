@@ -18,7 +18,9 @@ var streams = [];
 configs.forEach(function(config, i) {
   var newClient = arDrone.createClient(config);
   clients.push(newClient);
-  png(newClient, {"port": 80 + config.ip.substring(11, 13)});
+  var pngPort = 80 + config.ip.substring(11, 13);
+  png(newClient, {"port": pngPort});
+  console.log("setting up " + config.ip + " with png port " + pngPort);
 });
 
 var port = 3000;
@@ -49,6 +51,13 @@ io.sockets.on('connection', function (socket) {
     console.log('DISABLE EMERGENCY');
     clients.forEach(function(client) {
       client.disableEmergency();
+    });
+  });
+
+  socket.on('stop', function (data) {
+    console.log('STOP');
+    clients.forEach(function(client) {
+      client.stop();
     });
   });
 
