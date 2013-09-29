@@ -132,7 +132,7 @@ function detectMovement(gesture) {
 
         case "2":
             if(velocity < 0) {
-                return "forward";
+                return "front";
             } else {
                 return "back";
             }
