@@ -164,7 +164,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('up', function (data) {
     console.log('UP');
     clients.forEach(function(client) {
-      client.up(0.5);
+      client.up(0.6);
     });
     stopAfter(2000);
   });
@@ -172,7 +172,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('down', function (data) {
     console.log('DOWN');
     clients.forEach(function(client) {
-      client.down(0.5);
+      client.down(0.6);
     });
     stopAfter(2000);
   });
@@ -181,14 +181,14 @@ io.sockets.on('connection', function (socket) {
     console.log('!!!! FLIP !!!!');
     console.log("1. going up!");
     clients.forEach(function(client) {
-      client.up(0.4);
+      client.up(0.5);
     });
-    stopAfter(1500);
+    stopAfter(2000);
 
     setTimeout(function() {
       console.log("2. do a barrel roll!");
       clients.forEach(function(client) {
-        client.animate('flipLeft', 1000);
+        client.animate('flipLeft', 500);
         stopAfter(1500);
       });
     }, 2100);
