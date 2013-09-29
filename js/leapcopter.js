@@ -59,6 +59,14 @@ function showCamera(which) {
     cameras_visible = which;
 }
 
+document.addEventListener("keydown", function(event) {
+    console.log(event.keyCode);
+    var key = event.keyCode;
+    if(key == 66) {
+        sendCommandImmediate("blink");
+    }
+}, false);
+
 function hideCameras() {
     for(var i = 1; i <= 4; i++) {
         document.getElementById("camera" + i).className = "camera";
@@ -66,7 +74,8 @@ function hideCameras() {
 }
 
 function updateText(cmd) {
-    document.getElementById("text").innerHTML = cmd;
+    var el = document.getElementById("text");
+    el.innerHTML = '<span class="animated rollOut">' + cmd + '</span>';
 }
 
 function sendCommandImmediate(cmd) {

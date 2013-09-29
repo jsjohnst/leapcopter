@@ -7,7 +7,7 @@ var express = require('express')
   , arDrone = require('ar-drone')
   , png = require('ar-drone-png-stream');
 
-var directMode = true;
+var directMode = false;
 var configs = [
   {"name":"tumblrbot", "ip":"192.168.33.10"},
   {"ip":"192.168.33.20"},
