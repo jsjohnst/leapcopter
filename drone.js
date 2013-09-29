@@ -4,7 +4,8 @@ var express = require('express')
   , server = http.createServer(app)
   , io = require('socket.io').listen(server)
   , fs = require('fs')
-  , arDrone = require('ar-drone');
+  , arDrone = require('ar-drone')
+  , png = requre('ar-drone-png-stream');
 
 var configs = [
   {"ip":"192.168.33.10"},
@@ -13,8 +14,11 @@ var configs = [
 ];
 
 var clients = [];
+var streams = [];
 configs.forEach(function(config, i) {
-  clients.push(arDrone.createClient(config));
+  var newClient = arDrone.createClient(config);
+  clients.push(newClient);
+  png(newClient, {"port": 80 + config.ip.substring(11, 13)});
 });
 
 console.log(clients.length);
