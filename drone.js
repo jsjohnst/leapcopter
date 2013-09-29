@@ -5,7 +5,7 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , fs = require('fs')
   , arDrone = require('ar-drone')
-  , png = requre('ar-drone-png-stream');
+  , png = require('ar-drone-png-stream');
 
 var configs = [
   {"ip":"192.168.33.10"},
@@ -25,17 +25,19 @@ console.log(clients.length);
 
 var port = 3000;
 app.listen(port);
-
+/*
 app.use('/js', express.static(__dirname + '/js'));
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
+*/
 
 function stopAfter(ms) {
   clients.forEach(function(client) {
     setTimeout(function() { client.stop(); console.log("done"); }, 2000);
   });
 }
+
 
 io.sockets.on('connection', function (socket) {
   socket.on('dance', function (data) {
@@ -77,24 +79,24 @@ io.sockets.on('connection', function (socket) {
     console.log('right');
     clients.forEach(function(client) {
       client.right(0.05);
-    }
-    stop();
+    });
+    stopAfter(2000);
   });
 
   socket.on('left', function (data) {
     console.log('left');
     clients.forEach(function(client) {
       client.left(0.05);
-    }
-    stop();
+    });
+    stopAfter(2000);
   });
 
   socket.on('clockwise', function (data) {
     console.log('spin');
     clients.forEach(function(client) {
       client.clockwise(1);
-    }
-    stop();
+    });
+    stopAfter(2000);
   });
 });
 /*
