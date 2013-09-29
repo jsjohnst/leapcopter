@@ -6,7 +6,6 @@ var express = require('express')
   , fs = require('fs')
   , arDrone = require('ar-drone')
   , png = require('ar-drone-png-stream');
-var util = require('util');
 
 var configs = [
   {"name":"tumblrbot", "ip":"192.168.33.10"},
@@ -15,7 +14,6 @@ var configs = [
 ];
 
 var clients = [];
-var streams = [];
 configs.forEach(function(config, i) {
   var newClient = arDrone.createClient(config);
   newClient.name = (config.name !== undefined) ? config.name : config.ip;
@@ -36,7 +34,7 @@ app.get('/', function (req, res) {
 
 function stopAfter(ms) {
   clients.forEach(function(client) {
-    setTimeout(function() { client.stop(); console.log(client.name + " done"); }, ms);
+    setTimeout(function() { client.stop(); console.log(client.name + " stop"); }, ms);
   });
 }
 
@@ -73,7 +71,9 @@ io.sockets.on('connection', function (socket) {
   socket.on('takeoff', function (data) {
     console.log('TAKEOFF!');
     clients.forEach(function(client) {
-      client.takeoff();
+      client.takeoff(function() {
+        console.log("takeoff completed");
+      });
     });
   });
 
@@ -106,5 +106,38 @@ io.sockets.on('connection', function (socket) {
       client.clockwise(1);
     });
     stopAfter(2000);
+  });
+
+  socket.on('up', function (data) {
+    console.log('UP');
+    clients.forEach(function(client) {
+      client.up(0.05);
+    });
+    stopAfter(2000);
+  });
+
+  socket.on('down', function (data) {
+    console.log('DOWN');
+    clients.forEach(function(client) {
+      client.down(0.05);
+    });
+    stopAfter(2000);
+  });
+
+  socket.on('flip', function (data) {
+    console.log('!!!! FLIP !!!!');
+    console.log("1. going up!");
+    clients.forEach(function(client) {
+      client.up(0.2);
+    });
+    stopAfter(2000);
+
+    setTimeout(function() {
+      console.log("2. do a barrel roll!");
+      clients.forEach(function(client) {
+        client.animate('flipLeft', 1000);
+      });
+    }, 2100);
+
   });
 });
