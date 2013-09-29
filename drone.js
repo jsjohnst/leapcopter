@@ -7,6 +7,7 @@ var client2 = arDrone.createClient({"ip":"192.168.33.20"});
 var client3 = arDrone.createClient({"ip":"192.168.33.30"});
 
 var port = 3000
+app.use("/js", express.static(__dirname + '/js'));
 app.listen(port);
 
 function handler (req, res) {
