@@ -1,26 +1,19 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
+var express = require('express')
+  , app = express()
+  , server = require('http').createServer(app)
+  , io = require('socket.io').listen(server)
   , fs = require('fs')
   , arDrone = require('ar-drone');
 var client = arDrone.createClient({"ip":"192.168.33.10"});
 var client2 = arDrone.createClient({"ip":"192.168.33.20"});
 var client3 = arDrone.createClient({"ip":"192.168.33.30"});
 
-var port = 3000
-app.listen(port);
+var port = 3000;
 
-function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-
-    res.writeHead(200);
-    res.end(data);
-  });
-}
+app.use('/js', express.static(__dirname + '/js'));
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
 
 function stop() {
   setTimeout(function() { client.stop(); console.log("done"); }, 2000);
@@ -88,3 +81,6 @@ io.sockets.on('connection', function (socket) {
     stop();
   });
 });
+
+
+app.listen(port);
