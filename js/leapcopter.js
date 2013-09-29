@@ -71,7 +71,7 @@ function updateText(cmd) {
 function sendCommandImmediate(cmd) {
     console.log(cmd);
     updateText(cmd); 
-    //socket.emit(cmd);
+    socket.emit(cmd);
 }
 
 var sendCommand = debounce(function(cmd) {
