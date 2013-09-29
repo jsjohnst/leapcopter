@@ -1,6 +1,7 @@
 var express = require('express')
   , app = express()
-  , server = require('http').createServer(app)
+  , http = require('http')
+  , server = http.createServer(app)
   , io = require('socket.io').listen(server)
   , fs = require('fs')
   , arDrone = require('ar-drone');
@@ -9,6 +10,7 @@ var client2 = arDrone.createClient({"ip":"192.168.33.20"});
 var client3 = arDrone.createClient({"ip":"192.168.33.30"});
 
 var port = 3000;
+app.listen(port);
 
 app.use('/js', express.static(__dirname + '/js'));
 app.get('/', function (req, res) {
@@ -83,4 +85,3 @@ io.sockets.on('connection', function (socket) {
 });
 
 
-app.listen(port);
