@@ -17,7 +17,9 @@ var configs = [
 var clients = [];
 if (directMode) {
   console.log("DIRECT MODE - skipping configs, only connecting to one drone");
-  clients.push(arDrone.createClient());
+  client = arDrone.createClient();
+  client.name = "LOCAL DRONE";
+  clients.push(client);
 } else {
   configs.forEach(function(config, i) {
     var newClient = arDrone.createClient(config);
@@ -46,10 +48,27 @@ function stopAfter(ms) {
 
 
 io.sockets.on('connection', function (socket) {
-  socket.on('dance', function (data) {
-    console.log('DANCE');
+  socket.on('left-right', function (data) {
+    console.log('LEFT-RIGHT');
+    console.log("1. left!");
     clients.forEach(function(client) {
-      client.animate('yawShake', 2);
+      client.left(0.5);
+    });
+    stopAfter(1000);
+
+    setTimeout(function() {
+      console.log("2. right!");
+      clients.forEach(function(client) {
+        client.right(0.5);
+        stopAfter(1000);
+      });
+    }, 1100);
+  });
+
+  socket.on('wave', function (data) {
+    console.log('WAVE');
+    clients.forEach(function(client) {
+      client.animate('wave', 2);
     });
   });
 
@@ -95,7 +114,24 @@ io.sockets.on('connection', function (socket) {
   socket.on('right', function (data) {
     console.log('RIGHT');
     clients.forEach(function(client) {
-      client.right(0.05);
+      client.right(0.3);
+    });
+    stopAfter(2000);
+  });
+
+  socket.on('front', function (data) {
+    console.log('FRONT');
+    clients.forEach(function(client) {
+      client.front(0.3);
+    });
+    stopAfter(2000);
+  });
+
+
+  socket.on('back', function (data) {
+    console.log('BACK');
+    clients.forEach(function(client) {
+      client.back(0.3);
     });
     stopAfter(2000);
   });
@@ -103,23 +139,32 @@ io.sockets.on('connection', function (socket) {
   socket.on('left', function (data) {
     console.log('LEFT');
     clients.forEach(function(client) {
-      client.left(0.05);
+      client.left(0.3);
     });
     stopAfter(2000);
   });
 
-  socket.on('clockwise', function (data) {
+  socket.on('spin', function (data) {
     console.log('SPIN');
     clients.forEach(function(client) {
       client.clockwise(1);
     });
-    stopAfter(2000);
+    stopAfter(4000);
+  });
+
+  socket.on('spinblink', function (data) {
+    console.log('SPIN BLINK');
+    clients.forEach(function(client) {
+      client.clockwise(1);
+      client.animateLeds('redSnake', 5, 4);
+      stopAfter(4000);
+    });
   });
 
   socket.on('up', function (data) {
     console.log('UP');
     clients.forEach(function(client) {
-      client.up(0.05);
+      client.up(0.5);
     });
     stopAfter(2000);
   });
@@ -127,7 +172,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('down', function (data) {
     console.log('DOWN');
     clients.forEach(function(client) {
-      client.down(0.05);
+      client.down(0.5);
     });
     stopAfter(2000);
   });
@@ -136,7 +181,7 @@ io.sockets.on('connection', function (socket) {
     console.log('!!!! FLIP !!!!');
     console.log("1. going up!");
     clients.forEach(function(client) {
-      client.up(0.2);
+      client.up(0.4);
     });
     stopAfter(1500);
 
@@ -144,6 +189,7 @@ io.sockets.on('connection', function (socket) {
       console.log("2. do a barrel roll!");
       clients.forEach(function(client) {
         client.animate('flipLeft', 1000);
+        stopAfter(1500);
       });
     }, 2100);
 
