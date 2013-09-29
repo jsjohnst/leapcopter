@@ -80,7 +80,9 @@ io.sockets.on('connection', function (socket) {
   socket.on('land', function (data) {
     console.log('LANDING!');
     clients.forEach(function(client) {
-      client.land();
+      client.land(function() {
+        console.log('landing complete!');
+      });
     });
   });
 
