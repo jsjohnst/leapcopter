@@ -51,6 +51,7 @@ function showCamera(which) {
     document.getElementById("camera" + which).className += " show";
 
     if(which == 3) {
+        gestureRecognized("multi", "up");
         document.getElementById("camera4").className += " show";
         which = 4;
     }

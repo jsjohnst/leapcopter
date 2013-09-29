@@ -20,7 +20,7 @@ if (directMode) {
   client = arDrone.createClient();
   client.name = "LOCAL DRONE";
   clients.push(client);
-  png(client, {"port": 8010});
+  png(client, {port: 8010});
 } else {
   configs.forEach(function(config, i) {
     var newClient = arDrone.createClient(config);
