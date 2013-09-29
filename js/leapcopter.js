@@ -104,14 +104,25 @@ function handleCircle(event, gesture) {
 
 var controllerOptions = {enableGestures: true};
 
-Leap.loop(controllerOptions, function(event) {
-   if (event.hands.length == 2 && event.gestures.length == 2) {
-        var hand1 = detectMovement(event.gestures[0]);
-        var hand2 = detectMovement(event.gestures[1]);
+var lotsoffingers = false;
 
-        if(hand1 == "up" && hand2 == "up") {
-            return gestureRecognized("multi", "up");
-        } else if(hand1 == "down" && hand2 == "down") {
+Leap.loop(controllerOptions, function(event) {
+   if (event.hands.length == 2) {
+        if(event.gestures.length == 2) {
+            var hand1 = detectMovement(event.gestures[0]);
+            var hand2 = detectMovement(event.gestures[1]);
+
+            if(hand1 == "up" && hand2 == "up") {
+                return gestureRecognized("multi", "up");
+            } 
+        }
+
+        if(event.pointables.length >= 6) {
+            lotsoffingers = true;
+            setTimeout(function() { lotsoffingers = false; }, 2000); 
+        }
+    
+        if(lotsoffingers && event.pointables.length <= 2) {
             return gestureRecognized("multi", "down");
         }
    }
