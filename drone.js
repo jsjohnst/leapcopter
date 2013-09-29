@@ -159,10 +159,18 @@ io.sockets.on('connection', function (socket) {
     stopAfter(2000);
   });
 
-  socket.on('spin', function (data) {
+  socket.on('clockwise', function (data) {
     console.log('SPIN');
     clients.forEach(function(client) {
       client.clockwise(1);
+    });
+    stopAfter(4000);
+  });
+
+  socket.on('counterclockwise', function (data) {
+    console.log('SPIN CCW');
+    clients.forEach(function(client) {
+      client.counterClockwise(1);
     });
     stopAfter(4000);
   });
