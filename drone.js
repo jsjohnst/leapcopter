@@ -1,86 +1,106 @@
 var express = require('express')
   , app = express()
-  , server = require('http').createServer(app)
+  , http = require('http')
+  , server = http.createServer(app)
   , io = require('socket.io').listen(server)
   , fs = require('fs')
-  , arDrone = require('ar-drone');
-var client = arDrone.createClient({"ip":"192.168.33.10"});
-var client2 = arDrone.createClient({"ip":"192.168.33.20"});
-var client3 = arDrone.createClient({"ip":"192.168.33.30"});
+  , arDrone = require('ar-drone')
+  , png = require('ar-drone-png-stream');
+
+var configs = [
+  {"ip":"192.168.33.10"},
+  {"ip":"192.168.33.20"},
+  {"ip":"192.168.33.30"}
+];
+
+var clients = [];
+var streams = [];
+configs.forEach(function(config, i) {
+  var newClient = arDrone.createClient(config);
+  clients.push(newClient);
+  png(newClient, {"port": 80 + config.ip.substring(11, 13)});
+});
+
+console.log(clients.length);
 
 var port = 3000;
-
+app.listen(port);
+/*
 app.use('/js', express.static(__dirname + '/js'));
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
+*/
 
-function stop() {
-  setTimeout(function() { client.stop(); console.log("done"); }, 2000);
-  setTimeout(function() { client2.stop(); console.log("done"); }, 2000);
-  setTimeout(function() { client3.stop(); console.log("done"); }, 2000);
+function stopAfter(ms) {
+  clients.forEach(function(client) {
+    setTimeout(function() { client.stop(); console.log("done"); }, 2000);
+  });
 }
+
 
 io.sockets.on('connection', function (socket) {
   socket.on('dance', function (data) {
     console.log('dance');
-    client.animate('yawShake', 2);
-    client2.animate('yawShake', 2);
-    client3.animate('yawShake', 2);
+    clients.forEach(function(client) {
+      client.animate('yawShake', 2);
+    });
   });
 
   socket.on('de', function (data) {
     console.log('disable emergency');
-    client.disableEmergency();
-    client2.disableEmergency();
-    client3.disableEmergency();
+    clients.forEach(function(client) {
+      client.disableEmergency();
+    });
   });
 
   socket.on('blink', function (data) {
     console.log('blink');
-    client.animateLeds('redSnake', 5, 2);
-    client2.animateLeds('redSnake', 5, 2);
-    client3.animateLeds('redSnake', 5, 2);
+    clients.forEach(function(client) {
+      client.animateLeds('redSnake', 5, 2);
+    });
   });
 
   socket.on('takeoff', function (data) {
     console.log('TAKEOFF!');
-    client.takeoff();
-    client2.takeoff();
-    client3.takeoff();
+    clients.forEach(function(client) {
+      client.takeoff();
+    });
   });
 
   socket.on('land', function (data) {
     console.log('LANDING!');
-    client.land();
-    client2.land();
-    client3.land();
+    clients.forEach(function(client) {
+      client.land();
+    });
   });
 
   socket.on('right', function (data) {
     console.log('right');
-    client.right(0.05);
-    client2.right(0.05);
-    client3.right(0.05);
-    stop();
+    clients.forEach(function(client) {
+      client.right(0.05);
+    });
+    stopAfter(2000);
   });
 
   socket.on('left', function (data) {
     console.log('left');
-    client.left(0.05);
-    client2.left(0.05);
-    client3.left(0.05);
-    stop();
+    clients.forEach(function(client) {
+      client.left(0.05);
+    });
+    stopAfter(2000);
   });
 
   socket.on('clockwise', function (data) {
     console.log('spin');
-    client.clockwise(1);
-    client2.clockwise(1);
-    client3.clockwise(1);
-    stop();
+    clients.forEach(function(client) {
+      client.clockwise(1);
+    });
+    stopAfter(2000);
   });
 });
-
-
-app.listen(port);
+/*
+clients.forEach(function(client) {
+  setTimeout(function() { client.stop(); console.log("done"); }, 2000);
+});
+*/
