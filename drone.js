@@ -120,10 +120,43 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('land', function (data) {
     console.log('LANDING!');
-    clients.forEach(function(client) {
-      client.land(function() {
-        console.log('landing complete!');
-      });
+    clients.forEach(function(client, i) {
+      if (i == 0) {
+        console.log('squad leader up!');
+        client.up(0.6);
+        stopAfter(2000);
+        setTimeout(function() {
+          console.log('squad leader flip!');
+          client.animate('flipLeft', 500);
+          stopAfter(1500);
+        }, 3000);
+
+        setTimeout(function() {
+          console.log('squad leader landing start!');
+          client.land(function() {
+            console.log('squad leader landing complete!');
+          });
+        }, 6000);
+
+        setTimeout(function() {
+          console.log('squad leader landing backup start!');
+          client.land(function() {
+            console.log('squad leader landing backup complete!');
+          });
+        }, 10000);
+
+        setTimeout(function() {
+          console.log('squad leader landing backup2 start!');
+          client.land(function() {
+            console.log('squad leader landing backup2 complete!');
+          });
+        }, 14000);
+
+      } else {
+        client.land(function() {
+          console.log('landing complete!');
+        });
+      }
     });
   });
 
