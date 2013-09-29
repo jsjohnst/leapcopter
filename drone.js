@@ -94,7 +94,7 @@ io.sockets.on('connection', function (socket) {
     });
   });
 
-  socket.on('takeoff', function (data) {
+  socket.on('takeoffraw', function (data) {
     console.log('TAKEOFF!');
     clients.forEach(function(client) {
       client.takeoff(function() {
@@ -103,8 +103,8 @@ io.sockets.on('connection', function (socket) {
     });
   });
 
-  socket.on('fancytakeoff', function (data) {
-    console.log('FANCY TAKEOFF!');
+  socket.on('takeoff', function (data) {
+    console.log('TAKEOFF + UP!');
     clients.forEach(function(client) {
       client.takeoff();
 
@@ -153,6 +153,7 @@ io.sockets.on('connection', function (socket) {
         }, 14000);
 
       } else {
+        console.log('landing complete!');
         client.land(function() {
           console.log('landing complete!');
         });
