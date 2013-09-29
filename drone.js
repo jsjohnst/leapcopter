@@ -102,6 +102,21 @@ io.sockets.on('connection', function (socket) {
     });
   });
 
+  socket.on('fancytakeoff', function (data) {
+    console.log('FANCY TAKEOFF!');
+    clients.forEach(function(client) {
+      client.takeoff();
+
+      setTimeout(function() {
+        console.log("1. up");
+        clients.forEach(function(client) {
+          client.up(0.6);
+          stopAfter(1500);
+        });
+      }, 5000);
+    });
+  });
+
   socket.on('land', function (data) {
     console.log('LANDING!');
     clients.forEach(function(client) {
