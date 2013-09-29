@@ -7,7 +7,6 @@ var client2 = arDrone.createClient({"ip":"192.168.33.20"});
 var client3 = arDrone.createClient({"ip":"192.168.33.30"});
 
 var port = 3000
-app.use("/js", express.static(__dirname + '/js'));
 app.listen(port);
 
 function handler (req, res) {
@@ -24,17 +23,17 @@ function handler (req, res) {
 }
 
 function stop() {
-  setTimeout(function() { client.stop(); console.log("done"); }, 3000);
-  setTimeout(function() { client2.stop(); console.log("done"); }, 3000);
-  setTimeout(function() { client3.stop(); console.log("done"); }, 3000);
+  setTimeout(function() { client.stop(); console.log("done"); }, 2000);
+  setTimeout(function() { client2.stop(); console.log("done"); }, 2000);
+  setTimeout(function() { client3.stop(); console.log("done"); }, 2000);
 }
 
 io.sockets.on('connection', function (socket) {
   socket.on('dance', function (data) {
     console.log('dance');
-    client.animate('yawDance', 2);
-    client2.animate('yawDance', 2);
-    client3.animate('yawDance', 2);
+    client.animate('yawShake', 2);
+    client2.animate('yawShake', 2);
+    client3.animate('yawShake', 2);
   });
 
   socket.on('de', function (data) {
@@ -68,16 +67,20 @@ io.sockets.on('connection', function (socket) {
   socket.on('right', function (data) {
     console.log('right');
     client.right(0.05);
+    client2.right(0.05);
+    client3.right(0.05);
     stop();
   });
 
   socket.on('left', function (data) {
     console.log('left');
     client.left(0.05);
+    client2.left(0.05);
+    client3.left(0.05);
     stop();
   });
 
-  socket.on('spin', function (data) {
+  socket.on('clockwise', function (data) {
     console.log('spin');
     client.clockwise(1);
     client2.clockwise(1);
