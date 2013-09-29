@@ -7,6 +7,7 @@ var express = require('express')
   , arDrone = require('ar-drone')
   , png = require('ar-drone-png-stream');
 
+var directMode = true;
 var configs = [
   {"name":"tumblrbot", "ip":"192.168.33.10"},
   {"ip":"192.168.33.20"},
@@ -14,14 +15,19 @@ var configs = [
 ];
 
 var clients = [];
-configs.forEach(function(config, i) {
-  var newClient = arDrone.createClient(config);
-  newClient.name = (config.name !== undefined) ? config.name : config.ip;
-  clients.push(newClient);
-  var pngPort = 80 + config.ip.substring(11, 13);
-  png(newClient, {"port": pngPort});
-  console.log("setting up " + newClient.name + " with png port " + pngPort);
-});
+if (directMode) {
+  console.log("DIRECT MODE - skipping configs, only connecting to one drone");
+  clients.push(arDrone.createClient());
+} else {
+  configs.forEach(function(config, i) {
+    var newClient = arDrone.createClient(config);
+    newClient.name = (config.name !== undefined) ? config.name : config.ip;
+    clients.push(newClient);
+    var pngPort = 80 + config.ip.substring(11, 13);
+    png(newClient, {"port": pngPort});
+    console.log("setting up " + newClient.name + " with png port " + pngPort);
+  });
+}
 
 var port = 3000;
 server.listen(port);
@@ -132,7 +138,7 @@ io.sockets.on('connection', function (socket) {
     clients.forEach(function(client) {
       client.up(0.2);
     });
-    stopAfter(2000);
+    stopAfter(1500);
 
     setTimeout(function() {
       console.log("2. do a barrel roll!");
