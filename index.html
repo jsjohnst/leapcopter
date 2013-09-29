@@ -1,20 +1,73 @@
 <style>
     body {
         background-color: #000;
+        margin: 0;
+        padding: 1.25em;
+    }
+    #text {
+        font-family: helvetica;
+        font-weigth: bold;
+        font-size: 11em;
+        position: absolute;
+        top: 27%;
+        width: 100%;
+        color: #ffa;
+        text-shadow: 0 0 20px black;
+        text-align: center;
+        text-transform: capitalize;
+    }
+    #cameras {
+        position: fixed;
+        width: 96%;
+        height: 96%;
+        text-align: center;
     }
     .camera {
         background-repeat: no-repeat;
         background-position: center;
-        background-attachment: fixed;
         -webkit-background-size: cover;
+        width: 100%;
+        height: 100%;
+        margin-bottom: 5em;
+    }
+    #cameras.grid .camera {
+        float: left;
+        width: 48%;
+        height: 48%;
+        margin: 1em;
+    }
+    #camera3.grid {
+        clear: both;
+    }
+    #camera1.show {
+        background-image: url("http://localhost:8010");
+    }
+    #camera2.show {
+        background-image: url("http://files.tested.com/uploads/0/5/33854-ardrone_20_teaser.jpg");
+    }
+    #camera3.show {
+        background-image: url("http://files.tested.com/uploads/0/5/33854-ardrone_20_teaser.jpg");
+    }
+    #camera4.show {
+        background-image: url("http://files.tested.com/uploads/0/5/33854-ardrone_20_teaser.jpg");
     }
 </style>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/leap.js"></script>
+<div id="cameras">
+    <div id="camera1" class="camera"></div>
+    <div id="camera2" class="camera"></div>
+    <div id="camera3" class="camera"></div>
+    <div id="camera4" class="camera"></div>
+</div>
+<h2 id="text"></h2>
+<audio id="music" src="http://f.cl.ly/items/0N273o3H0w3o3v3t1C01/(Disc%202)%2006%20-%20Apocalypse%20Now%20-%20Ride%20Of%20The%20Valkyries.mp3"></audio>
+<script src="js/leap.js"></script>
+<script src="js/leapcopter.js"></script>
+<script src="socket.io/socket.io.js"></script>
 <script>
-  var socket = io.connect('http://192.168.33.110');
-  //var socket = io.connect('http://localhost');
+  if(io) {
+    var socket = io.connect('http://localhost');
+  }
+>>>>>>> Stashed changes
   //socket.emit('my other event', { my: 'data' });
   //socket.emit('takeoff');
 </script>
-<script src="/js/leapcopter.js"></script>
