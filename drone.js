@@ -39,21 +39,21 @@ function stopAfter(ms) {
 
 io.sockets.on('connection', function (socket) {
   socket.on('dance', function (data) {
-    console.log('dance');
+    console.log('DANCE');
     clients.forEach(function(client) {
       client.animate('yawShake', 2);
     });
   });
 
   socket.on('de', function (data) {
-    console.log('disable emergency');
+    console.log('DISABLE EMERGENCY');
     clients.forEach(function(client) {
       client.disableEmergency();
     });
   });
 
   socket.on('blink', function (data) {
-    console.log('blink');
+    console.log('BLINK');
     clients.forEach(function(client) {
       client.animateLeds('redSnake', 5, 2);
     });
@@ -74,7 +74,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('right', function (data) {
-    console.log('right');
+    console.log('RIGHT');
     clients.forEach(function(client) {
       client.right(0.05);
     });
@@ -82,7 +82,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('left', function (data) {
-    console.log('left');
+    console.log('LEFT');
     clients.forEach(function(client) {
       client.left(0.05);
     });
@@ -90,15 +90,10 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('clockwise', function (data) {
-    console.log('spin');
+    console.log('SPIN');
     clients.forEach(function(client) {
       client.clockwise(1);
     });
     stopAfter(2000);
   });
 });
-/*
-clients.forEach(function(client) {
-  setTimeout(function() { client.stop(); console.log("done"); }, 2000);
-});
-*/
