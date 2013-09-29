@@ -6,9 +6,10 @@ var express = require('express')
   , fs = require('fs')
   , arDrone = require('ar-drone')
   , png = require('ar-drone-png-stream');
+var util = require('util');
 
 var configs = [
-  {"ip":"192.168.33.10"},
+  {"name":"tumblrbot", "ip":"192.168.33.10"},
   {"ip":"192.168.33.20"},
   {"ip":"192.168.33.30"}
 ];
@@ -17,10 +18,11 @@ var clients = [];
 var streams = [];
 configs.forEach(function(config, i) {
   var newClient = arDrone.createClient(config);
+  newClient.name = (config.name !== undefined) ? config.name : config.ip;
   clients.push(newClient);
   var pngPort = 80 + config.ip.substring(11, 13);
   png(newClient, {"port": pngPort});
-  console.log("setting up " + config.ip + " with png port " + pngPort);
+  console.log("setting up " + newClient.name + " with png port " + pngPort);
 });
 
 var port = 3000;
@@ -34,7 +36,7 @@ app.get('/', function (req, res) {
 
 function stopAfter(ms) {
   clients.forEach(function(client) {
-    setTimeout(function() { client.stop(); console.log("done"); }, 2000);
+    setTimeout(function() { client.stop(); console.log(client.name + " done"); }, ms);
   });
 }
 
