@@ -153,7 +153,7 @@ io.sockets.on('connection', function (socket) {
         }, 14000);
 
       } else {
-        console.log('landing complete!');
+        console.log('wingman ' + client.name + ' landing');
         client.land(function() {
           console.log('landing complete!');
         });
