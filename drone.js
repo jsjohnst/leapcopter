@@ -114,7 +114,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('right', function (data) {
     console.log('RIGHT');
     clients.forEach(function(client) {
-      client.right(0.3);
+      client.right(0.2);
     });
     stopAfter(2000);
   });
@@ -122,7 +122,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('front', function (data) {
     console.log('FRONT');
     clients.forEach(function(client) {
-      client.front(0.3);
+      client.front(0.2);
     });
     stopAfter(2000);
   });
@@ -131,7 +131,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('back', function (data) {
     console.log('BACK');
     clients.forEach(function(client) {
-      client.back(0.3);
+      client.back(0.2);
     });
     stopAfter(2000);
   });
@@ -139,7 +139,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('left', function (data) {
     console.log('LEFT');
     clients.forEach(function(client) {
-      client.left(0.3);
+      client.left(0.2);
     });
     stopAfter(2000);
   });
